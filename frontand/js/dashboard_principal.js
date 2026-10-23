@@ -1,9 +1,25 @@
+
 // ==========================================
 // ENGAJA
 // DASHBOARD PRINCIPAL
+// Pesquisa, categorias, lojas e WhatsApp
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", function () {
+
+    // ==========================================
+    // CONTATOS DAS LOJAS
+    // Número autorizado para demonstração
+    // Formato: código do país + DDD + telefone
+    // ==========================================
+
+    const lojasWhatsApp = {
+        "Esporte Total": "5586995927749",
+        "Tech Store": "5586995927749",
+        "Fashion Store": "5586995927749",
+        "Essência & Cia": "5586995927749"
+    };
+
 
     // ==========================================
     // ELEMENTOS
@@ -38,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ==========================================
-    // MENU "MEU PERFIL"
+    // MENU MEU PERFIL
     // ==========================================
 
     const btnPerfil =
@@ -69,7 +85,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ==========================================
-    // MENU MEU PERFIL
+    // NEGOCIAÇÃO PELO WHATSAPP
+    // ==========================================
+
+    function negociarWhatsApp(nomeProduto, nomeLoja) {
+
+        const telefone = lojasWhatsApp[nomeLoja];
+
+        if (!telefone) {
+
+            alert(
+                "O WhatsApp desta loja ainda não foi cadastrado."
+            );
+
+            return;
+
+        }
+
+        const mensagem =
+            `Olá! Encontrei o produto "${nomeProduto}" ` +
+            `da loja "${nomeLoja}" no marketplace ENGAJA ` +
+            "e gostaria de negociar. Poderia me passar " +
+            "mais informações?";
+
+        const linkWhatsApp =
+            `https://wa.me/${telefone}?text=` +
+            encodeURIComponent(mensagem);
+
+        window.open(
+            linkWhatsApp,
+            "_blank",
+            "noopener,noreferrer"
+        );
+
+    }
+
+
+    // ==========================================
+    // MENU "MEU PERFIL"
     // ==========================================
 
     if (btnPerfil && perfilDropdown) {
@@ -120,15 +173,11 @@ document.addEventListener("DOMContentLoaded", function () {
             function () {
 
                 if (perfilDropdown) {
-
                     perfilDropdown.classList.remove("aberto");
-
                 }
 
                 if (modalLogin) {
-
                     modalLogin.classList.add("aberto");
-
                 }
 
             }
@@ -148,13 +197,12 @@ document.addEventListener("DOMContentLoaded", function () {
             function () {
 
                 if (perfilDropdown) {
-
                     perfilDropdown.classList.remove("aberto");
-
                 }
 
                 alert(
-                    "A área de cadastro será desenvolvida nas próximas etapas do projeto."
+                    "A área de cadastro será desenvolvida " +
+                    "nas próximas etapas do projeto."
                 );
 
             }
@@ -174,9 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
             function () {
 
                 if (modalLogin) {
-
                     modalLogin.classList.remove("aberto");
-
                 }
 
             }
@@ -196,9 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
             function (event) {
 
                 if (event.target === modalLogin) {
-
                     modalLogin.classList.remove("aberto");
-
                 }
 
             }
@@ -220,7 +264,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 event.preventDefault();
 
                 alert(
-                    "O login será conectado ao banco de dados em uma próxima etapa."
+                    "O login será conectado ao banco de dados " +
+                    "em uma próxima etapa."
                 );
 
             }
@@ -239,22 +284,16 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-
         const termo =
-            campoPesquisa.value
-                .trim()
-                .toLowerCase();
+            campoPesquisa.value.trim().toLowerCase();
 
-
-        // Se o campo estiver vazio
+        // Campo vazio: mostrar todos os produtos
 
         if (termo === "") {
 
             produtos.forEach(
                 function (produto) {
-
-                    produto.style.display = "block";
-
+                    produto.style.display = "";
                 }
             );
 
@@ -262,28 +301,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-
         let encontrou = false;
-
 
         produtos.forEach(
             function (produto) {
 
                 const nome =
-                    (
-                        produto.dataset.nome || ""
-                    ).toLowerCase();
-
+                    (produto.dataset.nome || "").toLowerCase();
 
                 const categoria =
-                    (
-                        produto.dataset.categoria || ""
-                    ).toLowerCase();
-
+                    (produto.dataset.categoria || "").toLowerCase();
 
                 const texto =
                     produto.innerText.toLowerCase();
-
 
                 if (
                     nome.includes(termo) ||
@@ -291,8 +321,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     texto.includes(termo)
                 ) {
 
-                    produto.style.display = "block";
-
+                    produto.style.display = "";
                     encontrou = true;
 
                 } else {
@@ -304,12 +333,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         );
 
-
-        // Leva o usuário até os produtos
-
         const produtosSection =
             document.getElementById("produtos");
-
 
         if (produtosSection) {
 
@@ -318,9 +343,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         }
-
-
-        // Caso não encontre
 
         if (!encontrou) {
 
@@ -339,12 +361,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // ==========================================
 
     if (btnPesquisar) {
-
-        btnPesquisar.addEventListener(
-            "click",
-            pesquisar
-        );
-
+        btnPesquisar.addEventListener("click", pesquisar);
     }
 
 
@@ -359,9 +376,7 @@ document.addEventListener("DOMContentLoaded", function () {
             function (event) {
 
                 if (event.key === "Enter") {
-
                     pesquisar();
-
                 }
 
             }
@@ -382,7 +397,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const produtosSection =
                     document.getElementById("produtos");
-
 
                 if (produtosSection) {
 
@@ -410,49 +424,37 @@ document.addEventListener("DOMContentLoaded", function () {
                 function () {
 
                     const categoriaSelecionada =
-                        (
-                            categoria.dataset.categoria || ""
-                        ).toLowerCase();
-
+                        (categoria.dataset.categoria || "")
+                            .toLowerCase();
 
                     let encontrou = false;
-
 
                     produtos.forEach(
                         function (produto) {
 
                             const categoriaProduto =
-                                (
-                                    produto.dataset.categoria || ""
-                                ).toLowerCase();
-
+                                (produto.dataset.categoria || "")
+                                    .toLowerCase();
 
                             if (
                                 categoriaProduto ===
                                 categoriaSelecionada
                             ) {
 
-                                produto.style.display =
-                                    "block";
-
+                                produto.style.display = "";
                                 encontrou = true;
 
                             } else {
 
-                                produto.style.display =
-                                    "none";
+                                produto.style.display = "none";
 
                             }
 
                         }
                     );
 
-
-                    // Vai para a área de produtos
-
                     const produtosSection =
                         document.getElementById("produtos");
-
 
                     if (produtosSection) {
 
@@ -462,13 +464,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     }
 
-
-                    // Caso não existam produtos
-
                     if (!encontrou) {
 
                         alert(
-                            "Ainda não existem produtos cadastrados nesta categoria."
+                            "Ainda não existem produtos cadastrados " +
+                            "nesta categoria."
                         );
 
                     }
@@ -492,24 +492,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 produtos.forEach(
                     function (produto) {
-
-                        produto.style.display =
-                            "block";
-
+                        produto.style.display = "";
                     }
                 );
 
-
                 if (campoPesquisa) {
-
                     campoPesquisa.value = "";
-
                 }
-
 
                 const produtosSection =
                     document.getElementById("produtos");
-
 
                 if (produtosSection) {
 
@@ -527,24 +519,61 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ==========================================
     // PRODUTOS
+    // BOTÃO DE NEGOCIAÇÃO PELO WHATSAPP
     // ==========================================
 
     botoesProduto.forEach(
         function (botao) {
 
+            const produto =
+                botao.closest(".produto");
+
+            if (!produto) {
+                return;
+            }
+
+            const nomeProduto =
+                produto.dataset.nome ||
+                botao.dataset.produto ||
+                produto.querySelector("h3")?.textContent.trim();
+
+            const elementoLoja =
+                produto.querySelector(".produto-info small");
+
+            const nomeLoja =
+                elementoLoja?.textContent.trim();
+
+            // Atualiza a descrição conforme solicitado
+
+            const descricao =
+                produto.querySelector(".produto-info p");
+
+            if (descricao) {
+                descricao.textContent = "Negocie com o vendedor.";
+            }
+
+            // Atualiza o texto do botão
+
+            botao.textContent = "Negociar pelo WhatsApp";
+
             botao.addEventListener(
                 "click",
                 function () {
 
-                    const nomeProduto =
-                        botao.dataset.produto;
+                    if (!nomeProduto || !nomeLoja) {
 
+                        alert(
+                            "Não foi possível identificar o produto " +
+                            "ou a loja responsável."
+                        );
 
-                    alert(
-                        "Produto selecionado:\n\n" +
-                        nomeProduto +
-                        "\n\n" +
-                        "A tela de detalhes e negociação será desenvolvida nas próximas etapas."
+                        return;
+
+                    }
+
+                    negociarWhatsApp(
+                        nomeProduto,
+                        nomeLoja
                     );
 
                 }
@@ -556,16 +585,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ==========================================
     // LOJAS / EMPRESAS
-    // ==========================================
-    //
-    // Esta parte prepara o Dashboard
-    // para abrir a próxima tela:
-    //
-    // perfil_empresa.html
-    //
-    // Exemplo:
-    // perfil_empresa.html?loja=Tech%20Store
-    //
+    // Abre o perfil da loja
     // ==========================================
 
     botoesLoja.forEach(
@@ -575,9 +595,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "click",
                 function () {
 
-                    const loja =
-                        botao.dataset.loja;
-
+                    const loja = botao.dataset.loja;
 
                     if (!loja) {
 
@@ -588,9 +606,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         return;
 
                     }
-
-
-                    // Abre o perfil da empresa
 
                     window.location.href =
                         "./perfil_empresa.html?loja=" +
